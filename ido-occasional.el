@@ -48,15 +48,16 @@
 Fall back to `completing-read' otherwise."
   (let ((filtered-collection
          (all-completions "" collection predicate)))
-    (if (<= (length filtered-collection) 30000)
+    (if (<= (length filtered-collection) 40000)
         (ido-completing-read
          prompt filtered-collection nil
          require-match initial-input hist
          def nil)
-      (completing-read
-       prompt collection predicate
-       require-match initial-input hist
-       def inherit-input-method))))
+      (let ((completing-read-function 'completing-read-default))
+        (completing-read
+         prompt collection predicate
+         require-match initial-input hist
+         def inherit-input-method)))))
 
 ;;;###autoload
 (defmacro with-ido-completion (fun)
